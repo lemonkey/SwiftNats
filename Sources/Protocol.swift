@@ -81,7 +81,7 @@ internal struct Server {
 		self.go = data["go"] as! String
 		self.host = data["host"] as! String
 		self.port = data["port"] as! UInt
-		self.authRequired = data["auth_required"] as! Bool
+		self.authRequired = data["auth_required"] as? Bool ?? false
 		
 		if data["ssl_required"] != nil {
 			self.sslRequired = data["ssl_required"] as! Bool
