@@ -6,11 +6,14 @@
 //  Copyright © 2016 Travelish. All rights reserved.
 //
 
-public protocol NatsDelegate: class {
+public protocol NatsDelegate: AnyObject {
 	func natsDidConnect(nats: Nats)
+	func natsDidConnectFailure(nats: Nats)
 	func natsDidDisconnect(nats: Nats, error: NSError?)
 	func natsDidReceiveMessage(nats: Nats, msg: NatsMessage)
 	func natsDidReceivePing(nats: Nats)
+	func natsDidReceiveProcessOk(nats: Nats)
+	func natsDidReceiveProcessError(nats: Nats, msg: String)
 }
 
 public struct NatsSubscription {
