@@ -6,11 +6,14 @@
 //  Copyright © 2016 Travelish. All rights reserved.
 //
 
-public protocol NatsDelegate: class {
+public protocol NatsDelegate: AnyObject {
 	func natsDidConnect(nats: Nats)
+	func natsDidConnectFailure(nats: Nats)
 	func natsDidDisconnect(nats: Nats, error: NSError?)
 	func natsDidReceiveMessage(nats: Nats, msg: NatsMessage)
 	func natsDidReceivePing(nats: Nats)
+	func natsDidReceiveProcessOk(nats: Nats)
+	func natsDidReceiveProcessError(nats: Nats, msg: String)
 }
 
 public struct NatsSubscription {
@@ -81,7 +84,7 @@ internal struct Server {
 		self.go = data["go"] as! String
 		self.host = data["host"] as! String
 		self.port = data["port"] as! UInt
-		self.authRequired = data["auth_required"] as! Bool
+		self.authRequired = data["auth_required"] as? Bool ?? false
 		
 		if data["ssl_required"] != nil {
 			self.sslRequired = data["ssl_required"] as! Bool

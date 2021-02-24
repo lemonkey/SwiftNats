@@ -68,9 +68,12 @@ Delegate
 
     public protocol NatsDelegate: class {
         func natsDidConnect(nats: Nats)
+        func natsDidConnectFailure(nats: Nats)
         func natsDidDisconnect(nats: Nats, error: NSError?)
         func natsDidReceiveMessage(nats: Nats, msg: NatsMessage)
         func natsDidReceivePing(nats: Nats)
+        func natsDidReceiveProcessOk(nats: Nats)
+	    func natsDidReceiveProcessError(nats: Nats, msg: String)
     }
 
 

@@ -71,7 +71,13 @@ open class Nats: NSObject, StreamDelegate {
 		self.open()
 
 		guard let newReadStream = inputStream, let newWriteStream = outputStream else { return }
-		guard isConnected else { return }
+		guard isConnected else {
+            queue.async { [weak self] in
+                guard let s = self else { return }
+                s.delegate?.natsDidConnectFailure(nats: s)
+            }
+            return
+        }
 
 		for stream in [newReadStream, newWriteStream] {
 			stream.delegate = self
@@ -415,7 +421,10 @@ open class Nats: NSObject, StreamDelegate {
 	 *
 	 */
 	fileprivate func processOk(_ msg: String) {
-		print("processOk \(msg)")
+		queue.async { [weak self] in
+            guard let s = self else { return }
+            s.delegate?.natsDidReceiveProcessOk(nats: s)
+        }
 	}
 
 	/**
@@ -424,7 +433,10 @@ open class Nats: NSObject, StreamDelegate {
 	 *
 	 */
 	fileprivate func processErr(_ msg: String) {
-		print("processErr \(msg)")
+		queue.async { [weak self] in
+            guard let s = self else { return }
+            s.delegate?.natsDidReceiveProcessError(nats: s, msg: msg)
+        }
 	}
 
 	/**
